@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Teste Avaliação Física</string>
+    <string name="icon">icone</string>
+    <string name="dica_paginas">Detalhes do teste</string>
+    <string name="dica_listas">Lista de testes</string>
+    <string name="dica_cria_taf">Criar Teste</string>
+    <string name="dica_sobre_taf">Sobre os Testes</string>
+    <string name="dica_altera_taf">Alterar Teste</string>
+    <string name="dica_contexto">Escolha uma opção</string>
+    <string name="help">"Escolha nas configurações a tabela do teste que deseja calcular a nota.\nColoque a data de nascimento do avaliado.\nAltere a data clicando no ícone de alteração.\nEscolha o Gênero.\nInsira os valores dos tempos, distâncias e quantidades obtidas.\nNão utilize letras, vírgulas ou pontos.\nClique em CALCULAR NOTA para obter o resultado parcial de cada prova e a Nota Final no TAF.\nClique em SALVAR TESTE para salvar o teste."</string>
+    <string name="info_app">"Aplicativo destinado ao cálculo de notas obtidas no Teste de Avaliação Física do Corpo de Bombeiros Militar de Minas Gerais.\nDesenvolvido por Paulo Mesquita.\nContato: mskapps.brazil@gmail.com"</string>
+    <string name="inicio_app">"Aplicativo destinado ao cálculo de notas obtidas no Teste de Avaliação Física"</string>
+
+    <!-- Strings dos Menus -->
+
+    <string name="menu_ajustes">Configurações</string>
+    <string name="menu_ajuda">Como usar</string>
+    <string name="menu_sobre">Sobre</string>
+    <string name="menu_sair">Sair</string>
+
+    <!-- Strings dos textos dos textView -->
+
+    <string name="dica_data">Data Nasc.: %1$s/%2$s/%3$s</string>
+    <string name="dica_data_TAF">TAF: %1$s</string>
+    <string name="dica_nota_TAF">Nota TAF: %1$s</string>
+    <string name="dica_avaliado">Avaliado: %1$s</string>
+    <string name="dica_idade">Idade: %1$s anos</string>
+    <string name="dica_sexo">Sexo Feminino</string>
+    <string name="dica_genero">Gênero: %1$s</string>
+    <string name="dica_natacao">Natação 12 min</string>
+    <string name="dica_2400">Corrida 2.400 m</string>
+    <string name="dica_nat12">Natação 12 min</string>
+    <string name="dica_nat75">Natação 75 m</string>
+    <string name="dica_SR">Shuttle-run</string>
+    <string name="dica_ABD">Abdominais</string>
+    <string name="dica_FB">Flexão de braço</string>
+    <string name="dica_teste">TESTE REALIZADO</string>
+    <string name="dica_valor">VALOR OBTIDO</string>
+    <string name="dica_nota">NOTA</string>
+    <string name="dica_zero">00</string>
+    <string name="dica_T2400">CORRIDA 2.400 METROS</string>
+    <string name="dica_Tnat12">12 MINUTOS NATAÇÃO</string>
+    <string name="dica_Tnat75">75 METROS NATAÇÃO</string>
+    <string name="dica_TABD">FLEXÃO ABDOMINAL</string>
+    <string name="dica_TSR">SHUTTLE-RUN</string>
+    <string name="dica_TFB">FLEXÃO DE BRAÇO</string>
+    <string name="formato_minuto">00:00\'</string>
+    <string name="formato_segundo">00\'00\"</string>
+    <string name="dica_NomeAvaliado">Digite o nome do avaliado</string>
+    <string name="dica_idade_errada">A data de nascimento do avaliado está no futuro</string>
+    <string name="dica_semDados">Digite os valores de tempo, distância e quantidade.\nClique em CALCULAR NOTA!</string>
+    <string name="dica_sem_testes">Nenhum teste salvo</string>
+    <string name="dica_zero_distancia">000</string>
+    <string name="dica_idade_texto">Idade:</string>
+    <string name="dica_barra">Barra fixa</string>
+    <string name="dica_nat100">Natação 100 m</string>
+    <string name="dica_caminhada_4800">Caminhada 4.800 m</string>
+    <string name="dica_corrida_100">Corrida 100 m</string>
+    <string name="dica_meio_sugado">Meio sugado</string>
+    <string name="dica_desv_mil">Desenvolvimento\nmilitar 10 kg</string>
+
+
+    <!-- Strings de dados dos testes -->
+
+    <string name="resultado_2400">Tempo: %1$s minutos Nota obtida: %2$s</string>
+    <string name="resultado_nat12">Distância: %1$s metros Nota obtida: %2$s</string>
+    <string name="resultado_nat75">Tempo: %1$s minutos Nota obtida: %2$s</string>
+    <string name="resultado_sr">Tempo: %1$s segundos Nota obtida: %2$s</string>
+    <string name="resultado_abd">Repetições: %1$s Nota obtida: %2$s</string>
+    <string name="resultado_fb">Repetições: %1$s Nota obtida: %2$s</string>
+    <string name="resultado_taf">NOTA FINAL TAF: %1$s</string>
+
+    <!-- Strings de Notificacoes do Aplicativo -->
+
+    <string name="dica_exporta_excel">Arquivo em formato Excel criado com sucesso!</string>
+    <string name="dica_importa_excel">Nomes importados do arquivo Excel com sucesso!</string>
+    <string name="dica_copia_bd">Cópia realizada com sucesso!</string>
+    <string name="dica_exclusao_bd">Todos os testes foram excluídos!</string>
+    <string name="dica_restaura_bd">Restauração realizada com sucesso!</string>
+    <string name="dica_salva_teste">Teste de %1$s salvo com sucesso!</string>
+    <string name="dica_envia_teste">Teste de %1$s enviado com sucesso!</string>
+    <string name="dica_compartilha_teste">Enviar teste de %1$s via:</string>
+    <string name="dica_edita_teste">Teste de %1$s alterado com sucesso!</string>
+    <string name="dica_deleta_teste">Teste de %1$s foi excluído com sucesso!</string>
+
+    <!-- Strings dos botoes -->
+
+    <string name="botao_calc_nota">CALCULAR NOTA</string>
+    <string name="botao_salva_taf">SALVAR TESTE</string>
+    <string name="botao_cria_taf">CRIAR TESTE</string>
+    <string name="botao_lista_taf">TESTES SALVOS</string>
+    <string name="botao_sobre_taf">SOBRE OS TESTES</string>
+    <string name="botao_altera_taf">ALTERAR TESTE</string>
+    <string name="botao_envia_teste">ENVIAR TESTE</string>
+    <string name="botao_excluir_teste">EXCLUIR TESTE</string>
+
+    <!-- Strings do Menu de Ajustes -->
+
+
+    <!-- Ajustes Gerais -->
+
+    <string name="pref_categoria_geral_key">geral</string>
+    <string name="pref_titulo_categoria_geral">Geral</string>
+    <string name="pref_titulo_idade">Idade do Avaliado</string>
+    <string name="pref_descricao_idade">Informar a idade do avaliado</string>
+    <string name="pref_descricao_data_nasc">Informar a data de nascimento</string>
+    <string name="pref_key_idade">idade</string>
+
+    <string name="pref_titulo_tabela">Tabela do Teste</string>
+    <string name="pref_descricao_tabela">Escolher a tabela do teste</string>
+    <string name="pref_key_tabela">tabela</string>
+
+    <!-- Ajustes Exportar -->
+
+    <string name="pref_categoria_exportar_key">exportar</string>
+    <string name="pref_titulo_categoria_exportar">Exportar / Importar testes</string>
+    <string name="pref_titulo_exportar">Exportar para Excel</string>
+    <string name="pref_descricao_exportar">Salva os testes em uma planilha de formato Excel no Cartão SD</string>
+    <string name="pref_key_exportar">excel</string>
+
+    <!-- Ajustes Importar -->
+
+    <string name="pref_titulo_importar">Importar nomes do Excel</string>
+    <string name="pref_descricao_importar">Importa os nomes dos avaliados de uma planilha de formato Excel no Cartão SD</string>
+    <string name="pref_key_importar">importar</string>
+
+    <!-- Ajustes BackUp -->
+
+    <string name="pref_categoria_bkup_restaura_key">bkuprest</string>
+    <string name="pref_titulo_bkup_restaura">Backup e Restauração</string>
+    <string name="pref_titulo_bkup">Fazer backup dos testes</string>
+    <string name="pref_descricao_bkup">Salva uma cópia dos testes no cartão SD</string>
+    <string name="pref_key_bkup">backup</string>
+    <string name="pref_titulo_restaura">Restaurar testes salvos</string>
+    <string name="pref_descricao_restaura">Recupera uma cópia dos testes salvos no cartão SD</string>
+    <string name="pref_key_restaura">restaura</string>
+
+    <!-- Ajustes APAGATUDO -->
+
+    <string name="pref_categoria_apagatudo_key">apagatudomesmo</string>
+    <string name="pref_titulo_apagatudo">Apagar todos os testes</string>
+    <string name="pref_descricao_apagatudo">Apaga todas os testes salvos no aplicativo</string>
+    <string name="pref_key_apagatudo">apagatudo</string>
+
+    <!-- Ajustes Informacoes do Aplicativo -->
+
+    <string name="pref_categoria_info_key">info</string>
+    <string name="pref_titulo_categoria_info">Sobre o aplicativo</string>
+    <string name="pref_titulo_autor">Desenvolvedor</string>
+    <string name="pref_descricao_autor">Paulo E S Mesquita</string>
+    <string name="pref_key_autor">desenvolvedor</string>
+    <string name="pref_titulo_versao">Versão do Aplicativo</string>
+    <string name="pref_descricao_versao">Versão: %1$s</string>
+    <string name="pref_key_versao">versao</string>
+
+    <!-- INFORMACOES SOBRE OS TESTES -->
+    <string name="info_sobre_teste">SOBRE O TESTE</string>
+    <string name="info_sobre_testes">TESTES PREVISTOS</string>
+    <string name="info_sobre_nota">CÁLCULO DAS NOTAS</string>
+    <string name="info_teste">O teste de avaliação física tem por finalidade avaliar o condicionamento físico dos servidores militares ativos do Corpo de Bombeiros Militar, nas avaliações anuais, seleção para ingresso no CBMMG, seleção para cursos internos, provas físicas aos alunos dos diversos cursos da Instituição.</string>
+    <string name="info_testes">O teste de avaliação física (TAF) é composto pelos testes de:\n- Avaliação clínica (emaxe médico e exames complementares);\n- Teste de força muscular do abdômen – flexão abdominal;\n- Teste de resistência aeróbica – corrida de 2.400 metros ou natação de 12 (doze) minutos;\n- Teste de força muscular de membros superiores - flexão de braços;\n- Teste de agilidade Shuttle Run (distância 9,14 m);\n- Teste de Natação 75 metros.</string>
+    <string name="info_notas">O resultado final do teste físico será dado pela média aritmética simples dos pontos alcançados pelos avaliados, conforme pontuações definidas em tabela, sendo que o avaliado precisa obter uma média total mínima de 6,0 pontos e notas individuais maiores que 3,0 pontos.</string>
+    <string name="info_2400">Teste de Resistência Aeróbica que considera o tempo gasto pelo avaliado para a realização da prova de corrida de  2.400 metros conforme faixa etária e sexo.</string>
+    <string name="info_nat12">Teste de Resistência Aeróbica que considera a distância percorrida pelo avaliado no teste de natação em piscina raiada no tempo de 12 (doze) minutos conforme faixa etária e sexo.</string>
+    <string name="info_nat75">Teste de Natação 75 (setenta e cinco) metros considera o tempo de realização da prova de natação em velocidade (estilos oficiais, livre) em piscina raiada, conforme faixa etária e sexo.</string>
+    <string name="info_sr">Teste de Agilidade (shuttle run) considera o tempo gasto pelo avaliado para percorrer quatro vezes uma distância mínima de 9,14 metros (uma jarda) transferindo peças de madeira de um lado a outro da distância demarcada no solo, conforme faixa etária e sexo.</string>
+    <string name="info_abd">Teste de Flexão Abdominal considera o número de flexões abdominais realizadas pelo avaliado conforme faixa etária e sexo.</string>
+    <string name="info_fb">Teste de Força muscular Membros Superiores considera o número de flexões de braços realizados pelo avaliado conforme sua faixa etária e sexo (04 apoios para masculino e 06 apoios para feminino).</string>
+
+</resources>

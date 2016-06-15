@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Tema das telas -->
+    <style name="TemaApp" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/vermelho_escuro</item>
+        <item name="colorPrimaryDark">@color/preto</item>
+        <item name="colorAccent">@color/azul_claro</item>
+        <item name="android:alertDialogTheme">@style/TemaDialogo</item>
+    </style>
+
+    <!-- Tema das caixas de dialogo -->
+    <style name="TemaDialogo" parent="@style/Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/azul_claro</item>
+        <item name="colorPrimary">@color/vermelho_escuro</item>
+        <item name="colorPrimaryDark">@color/preto</item>
+    </style>
+
+    <!-- Tema da splash screen -->
+    <style name="SplashScreen" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+        <item name="colorAccent">@color/azul_claro</item>
+    </style>
+
+</resources>

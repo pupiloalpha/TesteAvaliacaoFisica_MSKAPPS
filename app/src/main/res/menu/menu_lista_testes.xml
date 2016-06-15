@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mskapp="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:id="@+id/botao_enviar"
+        android:icon="@drawable/ic_send"
+        android:orderInCategory="1"
+        mskapp:showAsAction="ifRoom"
+        tools:ignore="MenuTitle" />
+    <item
+        android:id="@+id/botao_editar"
+        android:icon="@drawable/ic_edit"
+        android:orderInCategory="1"
+        mskapp:showAsAction="ifRoom"
+        tools:ignore="MenuTitle" />
+    <item
+        android:id="@+id/botao_apagar"
+        android:icon="@drawable/ic_delete"
+        android:orderInCategory="1"
+        mskapp:showAsAction="ifRoom"
+        tools:ignore="MenuTitle" />
+
+</menu>

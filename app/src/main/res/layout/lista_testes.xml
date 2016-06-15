@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context=".TesteAvaliacaoFisica">
+
+    <ListView
+        android:id="@+id/lvTestes"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:padding="5.0dip"
+        android:scrollingCache="false" />
+
+    <TextView
+        android:id="@+id/tvSemTestes"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_margin="70dp"
+        android:gravity="center"
+        android:text="@string/inicio_app"
+        android:textSize="24sp" />
+
+    <include layout="@layout/fab" />
+
+</RelativeLayout>

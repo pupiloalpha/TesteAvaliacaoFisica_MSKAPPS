@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mskapp="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvNomeTAF"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:height="40.0px"
+        android:gravity="center"
+        android:text="@string/dica_avaliado"
+        android:textSize="20.0dip"
+        android:textStyle="bold" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="0.7">
+
+        <TextView
+            android:id="@+id/tvDiaTAF"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:height="40.0px"
+            android:gravity="center"
+            android:text="@string/dica_data_TAF"
+            tools:ignore="NestedWeights" />
+
+        <TextView
+            android:id="@+id/tvIdade"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/dica_idade" />
+
+        <TextView
+            android:id="@+id/tvSexo"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/dica_genero" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="7"
+        android:orientation="vertical"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <TextView
+            android:id="@+id/tvNotaTAF"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/resultado_taf"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:ignore="NestedWeights" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:height="40.0px"
+            android:background="@color/cinza"
+            android:gravity="center"
+            android:text="@string/dica_T2400"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvNota2400"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/resultado_2400" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:height="40.0px"
+            android:background="@color/cinza"
+            android:gravity="center"
+            android:text="@string/dica_Tnat12"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvNota12"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/resultado_nat12" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:height="40.0px"
+            android:background="@color/cinza"
+            android:gravity="center"
+            android:text="@string/dica_Tnat75"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvNota75"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/resultado_nat75" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:height="40.0px"
+            android:background="@color/cinza"
+            android:gravity="center"
+            android:text="@string/dica_TSR"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvNotaSR"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/resultado_sr" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:height="40.0px"
+            android:background="@color/cinza"
+            android:gravity="center"
+            android:text="@string/dica_TABD"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvNotaABD"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/resultado_abd" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:height="40.0px"
+            android:background="@color/cinza"
+            android:gravity="center"
+            android:text="@string/dica_TFB"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvNotaFB"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/resultado_fb" />
+    </LinearLayout>
+
+</LinearLayout>
