@@ -117,24 +117,28 @@
     <string name="pref_categoria_exportar_key">exportar</string>
     <string name="pref_titulo_categoria_exportar">Exportar / Importar testes</string>
     <string name="pref_titulo_exportar">Exportar para Excel</string>
-    <string name="pref_descricao_exportar">Salva os testes em uma planilha de formato Excel no Cartão SD</string>
+    <string name="pref_descricao_exportar">Salva os testes em uma planilha de formato Excel</string>
     <string name="pref_key_exportar">excel</string>
 
     <!-- Ajustes Importar -->
 
     <string name="pref_titulo_importar">Importar nomes do Excel</string>
-    <string name="pref_descricao_importar">Importa os nomes dos avaliados de uma planilha de formato Excel no Cartão SD</string>
+    <string name="pref_descricao_importar">Importa os nomes dos avaliados de uma planilha de formato Excel</string>
     <string name="pref_key_importar">importar</string>
 
     <!-- Ajustes BackUp -->
 
     <string name="pref_categoria_bkup_restaura_key">bkuprest</string>
     <string name="pref_titulo_bkup_restaura">Backup e Restauração</string>
+    <string name="pref_titulo_auto_bkup">Backup Automático</string>
+    <string name="pref_descricao_auto_bkup_sim">Fazer backup dos testes sempre que fechar aplicativo</string>
+    <string name="pref_descricao_auto_bkup_nao">Fazer backup dos testes quando usuário solicitar</string>
+    <string name="pref_key_auto_bkup">autobackup</string>
     <string name="pref_titulo_bkup">Fazer backup dos testes</string>
-    <string name="pref_descricao_bkup">Salva uma cópia dos testes no cartão SD</string>
+    <string name="pref_descricao_bkup">Salva uma cópia dos testes</string>
     <string name="pref_key_bkup">backup</string>
     <string name="pref_titulo_restaura">Restaurar testes salvos</string>
-    <string name="pref_descricao_restaura">Recupera uma cópia dos testes salvos no cartão SD</string>
+    <string name="pref_descricao_restaura">Recupera uma cópia dos testes salvos</string>
     <string name="pref_key_restaura">restaura</string>
 
     <!-- Ajustes APAGATUDO -->

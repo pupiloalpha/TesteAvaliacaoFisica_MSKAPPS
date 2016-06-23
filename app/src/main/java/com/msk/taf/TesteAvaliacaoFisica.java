@@ -4,11 +4,14 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.backup.BackupManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -39,6 +42,8 @@ public class TesteAvaliacaoFisica extends AppCompatActivity implements
     Cursor cursor = null;
     FormataTexto formatador = new FormataTexto();
     ActionBar actionBar;
+    SharedPreferences buscaPreferencias = null;
+
     // ITENS DA TELA
     private ListView lista;
     private TextView semtestes, nome, idade, genero, nota;
@@ -46,8 +51,9 @@ public class TesteAvaliacaoFisica extends AppCompatActivity implements
     private ImageButton fab;
     private LayoutInflater preencheLista;
     // VARIAVEIS UTILIZADAS
-    private String nome_avaliado, idade_avaliado, genero_avaliado, carta;
+    private String nome_avaliado, idade_avaliado, genero_avaliado, carta, pastaBackUp;
     private Double nota_avaliado;
+    private Boolean autobkup = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +70,11 @@ public class TesteAvaliacaoFisica extends AppCompatActivity implements
                 startActivity(new Intent("com.msk.taf.CRIATESTE"));
             }
         });
+
+        PreferenceManager.getDefaultSharedPreferences(this);
+        autobkup = buscaPreferencias.getBoolean("autobackup", true);
+        pastaBackUp = buscaPreferencias.getString("backup", "");
+
         db.open();
         usarActionBar();
 
@@ -124,7 +135,8 @@ public class TesteAvaliacaoFisica extends AppCompatActivity implements
                     nota.setText(getResources().getString(
                             R.string.dica_nota_TAF,
                             String.format("%.2f", nota_avaliado)));
-                    if (nota_avaliado >= 6)
+
+                    if (cursor.getString(18).equals("Apto"))
                         nota.setTextColor(getResources().getColor(R.color.azul_claro));
                     else
                         nota.setTextColor(getResources().getColor(R.color.vermelho));
@@ -325,9 +337,9 @@ public class TesteAvaliacaoFisica extends AppCompatActivity implements
 
                                 break;
                             case 2: // Exclui Teste
-                                // db.open();
+                                db.open();
                                 db.excluiTeste(nome_avaliado);
-                                // db.close();
+                                db.close();
 
                                 Toast.makeText(
                                         getApplicationContext(),
@@ -351,10 +363,14 @@ public class TesteAvaliacaoFisica extends AppCompatActivity implements
 
     @Override
     protected void onDestroy() {
-        db.close();
 
-        BackupManager android = new BackupManager(getApplicationContext());
-        android.dataChanged();
+        if (autobkup == true) {
+            db.open();
+            db.copiaBD(pastaBackUp);
+            db.close();
+            BackupManager android = new BackupManager(getApplicationContext());
+            android.dataChanged();
+        }
 
         super.onDestroy();
     }

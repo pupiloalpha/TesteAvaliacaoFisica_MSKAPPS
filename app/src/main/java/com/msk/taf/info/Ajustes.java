@@ -38,14 +38,14 @@ import com.msk.taf.db.ImportaDeExcel;
 public class Ajustes extends PreferenceActivity implements
         OnPreferenceClickListener {
 
-    final int ESCOLHE_ARQUIVO = 1;
+    final int ESCOLHE_ARQUIVO = 222;
     Toolbar toolbar;
     Cursor buscaTAF = null;
     DBTAF dbTestes = new DBTAF(this);
     ExportaParaExcel excel = new ExportaParaExcel();
     ImportaDeExcel planilha = new ImportaDeExcel();
     private Preference backup, restaura, apagatudo, versao, exportar, importar, sobre;
-    private CheckBoxPreference idade;
+    private CheckBoxPreference idade, autobkup;
     private PreferenceScreen prefs;
     private String chave, nrVersao, arquivo, pastaBackUp;
     private PackageInfo info;
@@ -111,6 +111,7 @@ public class Ajustes extends PreferenceActivity implements
         importar = (Preference) prefs.findPreference("importar");
         sobre = (Preference) prefs.findPreference("desenvolvedor");
         idade = (CheckBoxPreference) prefs.findPreference("idade");
+        autobkup = (CheckBoxPreference) prefs.findPreference("autobackup");
 
         try {
             info = getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -129,6 +130,12 @@ public class Ajustes extends PreferenceActivity implements
             idade.setSummary(R.string.pref_descricao_data_nasc);
         }
 
+        if (autobkup.isChecked()) {
+            autobkup.setSummary(R.string.pref_descricao_auto_bkup_sim);
+        } else {
+            autobkup.setSummary(R.string.pref_descricao_auto_bkup_nao);
+        }
+
         SharedPreferences sharedPref = getSharedPreferences("backup", Context.MODE_PRIVATE);
         pastaBackUp = sharedPref.getString("backup", "");
 
@@ -142,11 +149,21 @@ public class Ajustes extends PreferenceActivity implements
 
         chave = itemPref.getKey();
 
+        if (chave.equals("autobackup")) {
+
+            if (autobkup.isChecked()) {
+                autobkup.setSummary(R.string.pref_descricao_auto_bkup_sim);
+            } else {
+                autobkup.setSummary(R.string.pref_descricao_auto_bkup_nao);
+            }
+        }
+
         if (chave.equals("backup")) {
 
             abrePasta();
 
         }
+
         if (chave.equals("restaura")) {
             // RESTAURA O BANCO DE DADOS
             dbTestes.open();
@@ -156,6 +173,7 @@ public class Ajustes extends PreferenceActivity implements
                     .show();
             dbTestes.close();
         }
+
         if (chave.equals("apagatudo")) {
             // APAGA O BANCO DE DADOS
             dbTestes.open();
@@ -165,6 +183,7 @@ public class Ajustes extends PreferenceActivity implements
                     .show();
             dbTestes.close();
         }
+
         if (chave.equals("excel")) {
             // EXPORTA TESTES PARA EXCEL
 
@@ -176,11 +195,7 @@ public class Ajustes extends PreferenceActivity implements
                         Toast.LENGTH_SHORT).show();
             }
         }
-        if (chave.equals("desenvolvedor")) {
-            // INFORMACOES SOBRE O APLICATIVO
-            Toast.makeText(getApplicationContext(),
-                    getString(R.string.info_app), Toast.LENGTH_SHORT).show();
-        }
+
         if (chave.equals("idade")) {
 
             if (idade.isChecked()) {
@@ -198,12 +213,12 @@ public class Ajustes extends PreferenceActivity implements
 
         if (chave.equals("importar")) {
 
-            Intent chooseFile;
-            Intent intent;
-            chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+            Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
             chooseFile.setType("file/*");
-            intent = Intent.createChooser(chooseFile, "Escolha o arquivo");
-            startActivityForResult(intent, ESCOLHE_ARQUIVO);
+            chooseFile.addCategory(Intent.CATEGORY_OPENABLE);
+            Intent intent = Intent.createChooser(chooseFile, "Escolha o arquivo");
+            //startActivityForResult(intent, ESCOLHE_ARQUIVO);
+            startActivityForResult(new Intent(this, EscolheArquivo.class), ESCOLHE_ARQUIVO);
 
         }
 
@@ -286,16 +301,28 @@ public class Ajustes extends PreferenceActivity implements
         switch (requestCode) {
             case ESCOLHE_ARQUIVO:
                 if (resultCode == RESULT_OK) {
-                    Uri uri = data.getData();
-                    arquivo = uri.getPath();
 
-                    dadosImportar = planilha.ArquivoImportado(arquivo);
+                    if (data != null){
 
-                    SalvaNomeTestes();
+                        Bundle extras = data.getExtras();
+                        arquivo = (String) extras.get(EscolhePasta.CHOSEN_DIRECTORY);
 
-                    Toast.makeText(getApplicationContext(),
-                            getString(R.string.dica_importa_excel),
-                            Toast.LENGTH_SHORT).show();
+                        try {
+
+                            // IMPORTA NOMES DO EXCEL
+                            dadosImportar = planilha.ArquivoImportado(arquivo);
+
+                            SalvaNomeTestes();
+
+                            Toast.makeText(getApplicationContext(),
+                                    getString(R.string.dica_importa_excel),
+                                    Toast.LENGTH_SHORT).show();
+
+                        } catch (Exception e) {
+
+                            Log.e("Seleção de arquivos","Deu erro!!!", e);
+                        }
+                    }
 
                 }
             break;
@@ -326,6 +353,9 @@ public class Ajustes extends PreferenceActivity implements
                         }
                     }
                 }
+
+                break;
+            case 333:
 
                 break;
         }

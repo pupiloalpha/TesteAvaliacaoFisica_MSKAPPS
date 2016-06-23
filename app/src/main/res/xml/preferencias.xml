@@ -33,6 +33,11 @@
     <PreferenceCategory
         android:key="@string/pref_categoria_bkup_restaura_key"
         android:title="@string/pref_titulo_bkup_restaura">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/pref_key_auto_bkup"
+            android:summary="@string/pref_descricao_auto_bkup_sim"
+            android:title="@string/pref_titulo_auto_bkup" />
         <Preference
             android:key="@string/pref_key_bkup"
             android:summary="@string/pref_descricao_bkup"
