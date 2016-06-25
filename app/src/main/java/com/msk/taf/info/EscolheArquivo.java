@@ -1,17 +1,23 @@
 package com.msk.taf.info;
 
+import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ListFragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +39,7 @@ public class EscolheArquivo extends ListActivity {
     public static final String CHOSEN_DIRECTORY = "chosenDir";
     public static final int PICK_DIRECTORY = 43522432;
     private File dir;
+    private String[] pastas;
     private boolean showHidden = false;
 
     @Override
@@ -40,7 +47,28 @@ public class EscolheArquivo extends ListActivity {
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
 
-        dir = Environment.getExternalStorageDirectory();
+        String strSDCardPath = System.getenv("SECONDARY_STORAGE");
+        if ((strSDCardPath == null) || strSDCardPath.length() == 0) {
+            strSDCardPath = System.getenv("EXTERNAL_SDCARD_STORAGE");
+        }
+        if (strSDCardPath != null) {
+            if (strSDCardPath.contains(":")) {
+                strSDCardPath = strSDCardPath.substring(0, strSDCardPath.indexOf(":"));
+            }
+
+            File externalFilePath = new File(strSDCardPath);
+            if (externalFilePath.exists() && externalFilePath.canWrite()) {
+                dir = externalFilePath.getParentFile();
+            } else {
+
+                dir = Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_DOWNLOADS).getParentFile().getParentFile().getParentFile();
+            }
+
+        } else {
+
+            dir = Environment.getExternalStorageDirectory();
+        }
 
         if (extras != null) {
             String preferredStartDir = extras.getString(START_DIR);
@@ -70,30 +98,46 @@ public class EscolheArquivo extends ListActivity {
         }
 
         final ArrayList<File> files = filter(dir.listFiles(), showHidden);
-        String[] names = names(files);
-        setListAdapter(new ArrayAdapter<String>(this, R.layout.linha_pastas, names){
+
+        pastas = names(files);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1) {
+
+            public View getView(int position, View convertView, ViewGroup parent) {
+
+                LayoutInflater inflater = getLayoutInflater();
+                View rowView = inflater.inflate(R.layout.linha_pastas, null);
+
+                TextView tv = (TextView) rowView.findViewById(R.id.tvPasta);
+                AppCompatImageView iv = (AppCompatImageView) rowView.findViewById(R.id.ivFolder);
+
+                String str = pastas[position];
+                tv.setText(str);
+
+                if (!files.get(position).isDirectory()) {
+                    iv.setImageResource(R.drawable.ic_archive);
+                    iv.setColorFilter(getResources().getColor(R.color.verde));
+                } else {
+                    iv.setImageResource(R.drawable.ic_folder);
+                    iv.setColorFilter(getResources().getColor(R.color.cinza));
+                }
+
+                return rowView;
+            }
+
             @Override
             public int getCount() {
                 return files.size();
             }
 
             @Override
-            public String getItem(int position) {
-                return super.getItem(position);
+
+            public long getItemId(int posicao) {
+                return posicao;
             }
 
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-
-                convertView = getLayoutInflater().inflate(R.layout.linha_pastas, null);
-                TextView tv = (TextView) convertView.findViewById(R.id.tvpasta);
-                if (!files.get(position).isDirectory())
-                    tv.setTextColor(getResources().getColor(R.color.azul_claro));
-
-                return super.getView(position, convertView, parent);
-            }
-        });
-
+        };
+        lv.setAdapter(adapter);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -105,7 +149,7 @@ public class EscolheArquivo extends ListActivity {
                     startActivityForResult(intent, PICK_DIRECTORY);
                 } else {
                     String path = files.get(position).getAbsolutePath();
-                    if (path.endsWith(".xls")){
+                    if (path.endsWith(".xls")) {
                         Intent result = new Intent();
                         result.putExtra(CHOSEN_DIRECTORY, path);
                         setResult(RESULT_OK, result);
@@ -127,11 +171,6 @@ public class EscolheArquivo extends ListActivity {
 
     private void returnDir(String path) {
 
-        SharedPreferences sharedPref = getSharedPreferences("backup", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("backup", path);
-        editor.commit();
-
         Intent result = new Intent();
         result.putExtra(CHOSEN_DIRECTORY, path);
         setResult(RESULT_OK, result);
@@ -139,18 +178,39 @@ public class EscolheArquivo extends ListActivity {
     }
 
     public ArrayList<File> filter(File[] file_list, boolean showHidden) {
-        ArrayList<File> files = new ArrayList<File>();
+        ArrayList<File> pastas = new ArrayList<File>();
         for (File file : file_list) {
+            if (!file.isDirectory())
+                continue;
+            if (!showHidden && file.isHidden())
+                continue;
+            if (!file.canRead())
+                continue;
+            pastas.add(file);
+        }
+        Collections.sort(pastas);
+
+        ArrayList<File> xls = new ArrayList<File>();
+        for (File file : file_list) {
+            if (file.isDirectory())
+                continue;
             if (!file.isDirectory() && !file.getAbsolutePath().endsWith(".xls"))
                 continue;
             if (!showHidden && file.isHidden())
                 continue;
             if (!file.canRead())
                 continue;
-            files.add(file);
+            xls.add(file);
         }
-        Collections.sort(files);
+        Collections.sort(xls);
 
+        ArrayList<File> files = new ArrayList<File>();
+        for (int i = 0; i < pastas.size(); i++) {
+            files.add(pastas.get(i));
+        }
+        for (int j = 0; j < xls.size(); j++) {
+            files.add(xls.get(j));
+        }
         return files;
     }
 

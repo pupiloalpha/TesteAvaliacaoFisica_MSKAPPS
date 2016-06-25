@@ -42,7 +42,6 @@ public class TesteAvaliacaoFisica extends AppCompatActivity implements
     Cursor cursor = null;
     FormataTexto formatador = new FormataTexto();
     ActionBar actionBar;
-    SharedPreferences buscaPreferencias = null;
 
     // ITENS DA TELA
     private ListView lista;
@@ -51,9 +50,8 @@ public class TesteAvaliacaoFisica extends AppCompatActivity implements
     private ImageButton fab;
     private LayoutInflater preencheLista;
     // VARIAVEIS UTILIZADAS
-    private String nome_avaliado, idade_avaliado, genero_avaliado, carta, pastaBackUp;
+    private String nome_avaliado, idade_avaliado, genero_avaliado, carta;
     private Double nota_avaliado;
-    private Boolean autobkup = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,10 +68,6 @@ public class TesteAvaliacaoFisica extends AppCompatActivity implements
                 startActivity(new Intent("com.msk.taf.CRIATESTE"));
             }
         });
-
-        PreferenceManager.getDefaultSharedPreferences(this);
-        autobkup = buscaPreferencias.getBoolean("autobackup", true);
-        pastaBackUp = buscaPreferencias.getString("backup", "");
 
         db.open();
         usarActionBar();
@@ -363,6 +357,11 @@ public class TesteAvaliacaoFisica extends AppCompatActivity implements
 
     @Override
     protected void onDestroy() {
+
+
+        SharedPreferences buscaPreferencias = PreferenceManager.getDefaultSharedPreferences(this);
+        Boolean autobkup = buscaPreferencias.getBoolean("autobackup", true);
+        String pastaBackUp = buscaPreferencias.getString("backup", "");
 
         if (autobkup == true) {
             db.open();

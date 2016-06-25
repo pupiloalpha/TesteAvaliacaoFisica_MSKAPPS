@@ -2,6 +2,7 @@
 <resources>
     <color name="vermelho">#FFFF0000</color>
     <color name="vermelho_escuro">#FFD50000</color>
+    <color name="verde">#FF009688</color>
     <color name="amarelo">#FFFFFF00</color>
     <color name="cinza">#FFBDBDBD</color>
     <color name="cinza_escuro">#FF616161</color>

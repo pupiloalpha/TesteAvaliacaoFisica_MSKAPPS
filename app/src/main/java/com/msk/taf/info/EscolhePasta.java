@@ -6,11 +6,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v7.widget.AppCompatImageView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.msk.taf.R;
@@ -33,6 +38,7 @@ public class EscolhePasta extends ListActivity {
     public static final String CHOSEN_DIRECTORY = "chosenDir";
     public static final int PICK_DIRECTORY = 43522432;
     private File dir;
+    private String[] pastas;
     private boolean showHidden = false;
     private boolean onlyDirs = true;
 
@@ -101,9 +107,39 @@ public class EscolhePasta extends ListActivity {
         }
 
         final ArrayList<File> files = filter(dir.listFiles(), onlyDirs, showHidden);
-        String[] names = names(files);
-        setListAdapter(new ArrayAdapter<String>(this, R.layout.linha_pastas, names));
 
+        pastas = names(files);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1) {
+
+            public View getView(int position, View convertView, ViewGroup parent) {
+
+                LayoutInflater inflater = getLayoutInflater();
+                View rowView = inflater.inflate(R.layout.linha_pastas, null);
+
+                TextView tv = (TextView) rowView.findViewById(R.id.tvPasta);
+                AppCompatImageView iv = (AppCompatImageView) rowView.findViewById(R.id.ivFolder);
+                iv.setImageResource(R.drawable.ic_folder);
+
+                String str = pastas[position];
+                tv.setText(str);
+
+                return rowView;
+            }
+
+            @Override
+            public int getCount() {
+                return files.size();
+            }
+
+            @Override
+
+            public long getItemId(int posicao) {
+                return posicao;
+            }
+
+        };
+        lv.setAdapter(adapter);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

@@ -74,6 +74,7 @@ public class Ajustes extends PreferenceActivity implements
         importar.setOnPreferenceClickListener(this);
         sobre.setOnPreferenceClickListener(this);
         idade.setOnPreferenceClickListener(this);
+        autobkup.setOnPreferenceClickListener(this);
     }
 
     private void BuscaValoresBD() {
@@ -192,6 +193,10 @@ public class Ajustes extends PreferenceActivity implements
             if (erro == 0) {
                 Toast.makeText(getApplicationContext(),
                         getString(R.string.dica_exporta_excel),
+                        Toast.LENGTH_SHORT).show();
+            } else{
+                Toast.makeText(getApplicationContext(),
+                        getString(R.string.erro_exporta_excel),
                         Toast.LENGTH_SHORT).show();
             }
         }
@@ -321,6 +326,9 @@ public class Ajustes extends PreferenceActivity implements
                         } catch (Exception e) {
 
                             Log.e("Seleção de arquivos","Deu erro!!!", e);
+                            Toast.makeText(getApplicationContext(),
+                                    getString(R.string.erro_importa_excel),
+                                    Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -349,6 +357,10 @@ public class Ajustes extends PreferenceActivity implements
 
                         } catch (Exception e) {
 
+
+                            Toast.makeText(getApplicationContext(),
+                                    getString(R.string.erro_copia_bd), Toast.LENGTH_SHORT)
+                                    .show();
                             Log.e("Seleção de arquivos","Deu erro!!!", e);
                         }
                     }

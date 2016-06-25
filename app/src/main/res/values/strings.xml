@@ -75,8 +75,11 @@
     <!-- Strings de Notificacoes do Aplicativo -->
 
     <string name="dica_exporta_excel">Arquivo em formato Excel criado com sucesso!</string>
+    <string name="erro_exporta_excel">Erro ao criar arquivo Excel!</string>
     <string name="dica_importa_excel">Nomes importados do arquivo Excel com sucesso!</string>
+    <string name="erro_importa_excel">Erro durante a importação.\nArquivo Excel protegido!</string>
     <string name="dica_copia_bd">Cópia realizada com sucesso!</string>
+    <string name="erro_copia_bd">Erro durante cópia dos dados!</string>
     <string name="dica_exclusao_bd">Todos os testes foram excluídos!</string>
     <string name="dica_restaura_bd">Restauração realizada com sucesso!</string>
     <string name="dica_salva_teste">Teste de %1$s salvo com sucesso!</string>

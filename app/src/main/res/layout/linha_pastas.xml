@@ -1,9 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/tvpasta"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:padding="12dp"
-    android:text="@string/dica_avaliado"
-    android:textColor="@color/cinza_escuro"
-    android:textSize="18dp"></TextView>
+    xmlns:mskapp="http://schemas.android.com/apk/res-auto"
+    android:padding="2dp"
+    android:paddingLeft="10dp"
+    android:paddingStart="10dp"
+    android:orientation="horizontal"
+    tools:ignore="UseCompoundDrawables">
+    <android.support.v7.widget.AppCompatImageView
+        android:layout_width="36dp"
+        android:layout_height="match_parent"
+        android:id="@+id/ivFolder"
+        android:contentDescription="@string/icon"
+        mskapp:srcCompat="@drawable/ic_folder"
+        android:tint="@color/cinza"
+        tools:ignore="MissingPrefix"/>
+    <TextView
+        android:id="@+id/tvPasta"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:padding="12dp"
+        android:text="@string/dica_avaliado"
+        android:textColor="@color/cinza_escuro"
+        android:textSize="18dp"
+        tools:ignore="SpUsage" />
+</LinearLayout>
