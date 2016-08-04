@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.backup.BackupManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -28,7 +27,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.msk.taf.R;
 import com.msk.taf.calc.FormataTexto;
 import com.msk.taf.db.DBTAF;
 
@@ -37,17 +35,14 @@ public class TesteAvaliacaoFisica extends AppCompatActivity implements
         OnItemClickListener, OnItemLongClickListener {
 
     // ELEMENTOS PARA MONTA A LISTA
-    SimpleCursorAdapter adapter;
-    DBTAF db = new DBTAF(this);
-    Cursor cursor = null;
-    FormataTexto formatador = new FormataTexto();
-    ActionBar actionBar;
+    private DBTAF db = new DBTAF(this);
+    private Cursor cursor = null;
+    private FormataTexto formatador = new FormataTexto();
 
     // ITENS DA TELA
     private ListView lista;
     private TextView semtestes, nome, idade, genero, nota;
     private View viewLista;
-    private ImageButton fab;
     private LayoutInflater preencheLista;
     // VARIAVEIS UTILIZADAS
     private String nome_avaliado, idade_avaliado, genero_avaliado, carta;
@@ -60,7 +55,7 @@ public class TesteAvaliacaoFisica extends AppCompatActivity implements
 
         lista = (ListView) findViewById(R.id.lvTestes);
         semtestes = (TextView) findViewById(R.id.tvSemTestes);
-        fab = (ImageButton) findViewById(R.id.ibfab);
+        ImageButton fab = (ImageButton) findViewById(R.id.ibfab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,12 +75,12 @@ public class TesteAvaliacaoFisica extends AppCompatActivity implements
     }
 
     @SuppressWarnings("deprecation")
-    public void ListaDeTestes() {
+    private void ListaDeTestes() {
         db.open();
         cursor = db.buscaTestes();
         int i = cursor.getCount();
         if (i >= 0) {
-            adapter = new SimpleCursorAdapter(this, R.id.lvTestes, cursor,
+            SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.id.lvTestes, cursor,
                     new String[]{DBTAF.COLUNA_AVALIADO}, new int[]{
                     R.id.tvNomeAvaliado, R.id.tvIdadeAvaliado,
                     R.id.tvGeneroAvaliado, R.id.tvNotaAvaliado}) {
@@ -159,9 +154,8 @@ public class TesteAvaliacaoFisica extends AppCompatActivity implements
 
     @SuppressLint("NewApi")
     private void usarActionBar() {
-        // Verifica a versao do Android para usar o ActionBar
-        // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-        actionBar = getSupportActionBar();
+
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
 
     }
@@ -363,7 +357,7 @@ public class TesteAvaliacaoFisica extends AppCompatActivity implements
         Boolean autobkup = buscaPreferencias.getBoolean("autobackup", true);
         String pastaBackUp = buscaPreferencias.getString("backup", "");
 
-        if (autobkup == true) {
+        if (autobkup) {
             db.open();
             db.copiaBD(pastaBackUp);
             db.close();

@@ -1,9 +1,8 @@
 package com.msk.taf.info;
 
 import android.app.ListActivity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.widget.AppCompatImageView;
@@ -13,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,80 +19,59 @@ import android.widget.Toast;
 import com.msk.taf.R;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-
-import static android.app.Activity.RESULT_OK;
-
-/**
- * Created by msk on 14/06/16.
- */
+import java.util.Date;
 
 public class EscolhePasta extends ListActivity {
 
-    public static final String START_DIR = "startDir";
-    public static final String ONLY_DIRS = "onlyDirs";
-    public static final String SHOW_HIDDEN = "showHidden";
+    private static final String START_DIR = "startDir";
     public static final String CHOSEN_DIRECTORY = "chosenDir";
-    public static final int PICK_DIRECTORY = 43522432;
+    private static final int PICK_DIRECTORY = 4352;
     private File dir;
     private String[] pastas;
+    private String tipo;
     private boolean showHidden = false;
-    private boolean onlyDirs = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
+        tipo = extras.getString("tipo");
+        String preferredStartDir = extras.getString(START_DIR);
 
-        String strSDCardPath = System.getenv("SECONDARY_STORAGE");
-        if ((strSDCardPath == null) || strSDCardPath.length() == 0){
-            strSDCardPath = System.getenv("EXTERNAL_SDCARD_STORAGE");
-        }
-        if (strSDCardPath != null){
-            if (strSDCardPath.contains(":")){
-                strSDCardPath = strSDCardPath.substring (0, strSDCardPath.indexOf(":"));
+        if (preferredStartDir != null) {
+            if (new File(preferredStartDir).isDirectory()) {
+                dir = new File(preferredStartDir);
             }
-
-            File externalFilePath = new File (strSDCardPath);
-            if (externalFilePath.exists() && externalFilePath.canWrite()){
-                dir = externalFilePath.getParentFile();
-            } else {
-
-                dir = Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_DOWNLOADS).getParentFile().getParentFile().getParentFile();
-            }
-
         } else {
-
-            dir = Environment.getExternalStorageDirectory();
-        }
-
-        if (extras != null) {
-            String preferredStartDir = extras.getString(START_DIR);
-            showHidden = extras.getBoolean(SHOW_HIDDEN, false);
-            onlyDirs = extras.getBoolean(ONLY_DIRS, true);
-            if (preferredStartDir != null) {
-                File startDir = new File(preferredStartDir);
-                if (startDir.isDirectory()) {
-                    dir = startDir;
-                }
+            if (Build.VERSION.SDK_INT >= 23) {
+                dir = new File("/");
+            } else {
+                dir = Environment.getExternalStorageDirectory().getParentFile().getParentFile();
             }
         }
 
         setContentView(R.layout.lista_pastas);
-        setTheme(R.style.TemaApp);
         setTitle(dir.getAbsolutePath());
+
+        TextView sem = (TextView) findViewById(R.id.tvSemTestes);
+
         Button btnChoose = (Button) findViewById(R.id.btnChoose);
-        String name = dir.getName();
-        if (name.length() == 0)
-            name = "/";
-        btnChoose.setText(" Salvar em '" + name + "'");
-        btnChoose.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                returnDir(dir.getAbsolutePath());
-            }
-        });
+        if (!tipo.equals("")) {
+            btnChoose.setVisibility(View.GONE);
+        } else {
+            String name = dir.getName();
+            if (name.length() == 0)
+                name = "/";
+            btnChoose.setText(" Salvar em '" + name + "'");
+            btnChoose.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    returnDir(dir.getAbsolutePath());
+                }
+            });
+        }
 
         ListView lv = getListView();
         lv.setTextFilterEnabled(true);
@@ -106,7 +83,7 @@ public class EscolhePasta extends ListActivity {
             return;
         }
 
-        final ArrayList<File> files = filter(dir.listFiles(), onlyDirs, showHidden);
+        final ArrayList<File> files = filter(dir.listFiles());
 
         pastas = names(files);
 
@@ -118,11 +95,26 @@ public class EscolhePasta extends ListActivity {
                 View rowView = inflater.inflate(R.layout.linha_pastas, null);
 
                 TextView tv = (TextView) rowView.findViewById(R.id.tvPasta);
+                TextView data = (TextView) rowView.findViewById(R.id.tvData);
                 AppCompatImageView iv = (AppCompatImageView) rowView.findViewById(R.id.ivFolder);
-                iv.setImageResource(R.drawable.ic_folder);
 
                 String str = pastas[position];
                 tv.setText(str);
+
+                if (!files.get(position).isDirectory()) {
+                    iv.setImageResource(R.drawable.ic_archive);
+                    iv.setColorFilter(getResources().getColor(R.color.verde));
+
+                    Date lastModified = new Date(files.get(position).lastModified());
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                    String formattedDateString = formatter.format(lastModified);
+                    data.setText(formattedDateString);
+                } else {
+                    iv.setImageResource(R.drawable.ic_folder);
+                    iv.setColorFilter(getResources().getColor(R.color.cinza_escuro));
+                    data.setVisibility(View.GONE);
+
+                }
 
                 return rowView;
             }
@@ -140,17 +132,25 @@ public class EscolhePasta extends ListActivity {
 
         };
         lv.setAdapter(adapter);
+        lv.setEmptyView(sem);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (!files.get(position).isDirectory())
-                    return;
-                String path = files.get(position).getAbsolutePath();
-                Intent intent = new Intent(EscolhePasta.this, EscolhePasta.class);
-                intent.putExtra(EscolhePasta.START_DIR, path);
-                intent.putExtra(EscolhePasta.SHOW_HIDDEN, showHidden);
-                intent.putExtra(EscolhePasta.ONLY_DIRS, onlyDirs);
-                startActivityForResult(intent, PICK_DIRECTORY);
+                if (files.get(position).isDirectory()) {
+                    String path = files.get(position).getAbsolutePath();
+                    Intent intent = new Intent(EscolhePasta.this, EscolhePasta.class);
+                    intent.putExtra(EscolhePasta.START_DIR, path);
+                    intent.putExtra("tipo", tipo);
+                    startActivityForResult(intent, PICK_DIRECTORY);
+                } else {
+                    String path = files.get(position).getAbsolutePath();
+                    if (path.endsWith(tipo)) {
+                        Intent result = new Intent();
+                        result.putExtra(CHOSEN_DIRECTORY, path);
+                        setResult(RESULT_OK, result);
+                        finish();
+                    }
+                }
             }
         });
     }
@@ -166,33 +166,54 @@ public class EscolhePasta extends ListActivity {
 
     private void returnDir(String path) {
 
-        SharedPreferences sharedPref = getSharedPreferences("backup", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("backup", path);
-        editor.commit();
-
         Intent result = new Intent();
         result.putExtra(CHOSEN_DIRECTORY, path);
         setResult(RESULT_OK, result);
         finish();
     }
 
-    public ArrayList<File> filter(File[] file_list, boolean onlyDirs, boolean showHidden) {
-        ArrayList<File> files = new ArrayList<File>();
+    private ArrayList<File> filter(File[] file_list) {
+        ArrayList<File> pastas = new ArrayList<File>();
         for (File file : file_list) {
-            if (onlyDirs && !file.isDirectory())
+            if (!file.isDirectory())
                 continue;
-            if (!showHidden && file.isHidden())
+            if (file.isHidden())
                 continue;
             if (!file.canRead())
                 continue;
-            files.add(file);
+            if (!file.canWrite())
+                continue;
+            pastas.add(file);
         }
-        Collections.sort(files);
+        Collections.sort(pastas);
+
+        ArrayList<File> xls = new ArrayList<File>();
+        if (!tipo.equals("")) {
+            for (File file : file_list) {
+                if (file.isDirectory())
+                    continue;
+                if (!file.getAbsolutePath().endsWith(tipo))
+                    continue;
+                if (file.isHidden())
+                    continue;
+                if (!file.canRead())
+                    continue;
+                xls.add(file);
+            }
+            Collections.sort(xls);
+        }
+
+        ArrayList<File> files = new ArrayList<File>();
+        for (int i = 0; i < pastas.size(); i++) {
+            files.add(pastas.get(i));
+        }
+        for (int j = 0; j < xls.size(); j++) {
+            files.add(xls.get(j));
+        }
         return files;
     }
 
-    public String[] names(ArrayList<File> files) {
+    private String[] names(ArrayList<File> files) {
         String[] names = new String[files.size()];
         int i = 0;
         for (File file : files) {

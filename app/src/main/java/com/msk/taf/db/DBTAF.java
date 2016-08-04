@@ -260,7 +260,8 @@ public class DBTAF {
                 String currentDBPath = "//data//com.msk.taf//databases//meus_testes";
                 String backupDBPath = "meus_testes";
                 File currentDB = new File(data, currentDBPath);
-                File backupDB = new File(sd, backupDBPath);
+                //File backupDB = new File(sd, backupDBPath);
+                File backupDB = sd;
 
                 if (currentDB.exists()) {
                     FileChannel src = new FileInputStream(backupDB)

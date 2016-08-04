@@ -1,14 +1,15 @@
 package com.msk.taf.info;
 
+import android.Manifest;
 import android.app.backup.BackupManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -16,6 +17,8 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatCheckedTextView;
 import android.support.v7.widget.AppCompatEditText;
@@ -38,12 +41,14 @@ import com.msk.taf.db.ImportaDeExcel;
 public class Ajustes extends PreferenceActivity implements
         OnPreferenceClickListener {
 
-    final int ESCOLHE_ARQUIVO = 222;
-    Toolbar toolbar;
-    Cursor buscaTAF = null;
-    DBTAF dbTestes = new DBTAF(this);
-    ExportaParaExcel excel = new ExportaParaExcel();
-    ImportaDeExcel planilha = new ImportaDeExcel();
+    private final int ESCOLHE_PASTA = 111;
+    private final int ESCOLHE_XLS = 222;
+    private final int ESCOLHE_BACKUP = 333;
+    private Toolbar toolbar;
+    private Cursor buscaTAF = null;
+    private DBTAF dbTestes = new DBTAF(this);
+    private ExportaParaExcel excel = new ExportaParaExcel();
+    private ImportaDeExcel planilha = new ImportaDeExcel();
     private Preference backup, restaura, apagatudo, versao, exportar, importar, sobre;
     private CheckBoxPreference idade, autobkup;
     private PreferenceScreen prefs;
@@ -140,7 +145,7 @@ public class Ajustes extends PreferenceActivity implements
         SharedPreferences sharedPref = getSharedPreferences("backup", Context.MODE_PRIVATE);
         pastaBackUp = sharedPref.getString("backup", "");
 
-        if (!pastaBackUp.equals("")){
+        if (!pastaBackUp.equals("")) {
             backup.setSummary(pastaBackUp);
         }
     }
@@ -160,19 +165,19 @@ public class Ajustes extends PreferenceActivity implements
         }
 
         if (chave.equals("backup")) {
-
-            abrePasta();
-
+            // EXPORTA TESTES PARA EXCEL
+            if (Build.VERSION.SDK_INT >= 23)
+                PermissaoSD(ESCOLHE_PASTA);
+            else
+                abrePasta(ESCOLHE_PASTA);
         }
 
         if (chave.equals("restaura")) {
-            // RESTAURA O BANCO DE DADOS
-            dbTestes.open();
-            dbTestes.restauraBD(pastaBackUp);
-            Toast.makeText(getApplicationContext(),
-                    getString(R.string.dica_restaura_bd), Toast.LENGTH_SHORT)
-                    .show();
-            dbTestes.close();
+            // EXPORTA TESTES PARA EXCEL
+            if (Build.VERSION.SDK_INT >= 23)
+                PermissaoSD(ESCOLHE_BACKUP);
+            else
+                abrePasta(ESCOLHE_BACKUP);
         }
 
         if (chave.equals("apagatudo")) {
@@ -194,7 +199,7 @@ public class Ajustes extends PreferenceActivity implements
                 Toast.makeText(getApplicationContext(),
                         getString(R.string.dica_exporta_excel),
                         Toast.LENGTH_SHORT).show();
-            } else{
+            } else {
                 Toast.makeText(getApplicationContext(),
                         getString(R.string.erro_exporta_excel),
                         Toast.LENGTH_SHORT).show();
@@ -202,7 +207,6 @@ public class Ajustes extends PreferenceActivity implements
         }
 
         if (chave.equals("idade")) {
-
             if (idade.isChecked()) {
                 idade.setSummary(R.string.pref_descricao_idade);
                 Toast.makeText(getApplicationContext(),
@@ -217,19 +221,46 @@ public class Ajustes extends PreferenceActivity implements
         }
 
         if (chave.equals("importar")) {
-
-            Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
-            chooseFile.setType("file/*");
-            chooseFile.addCategory(Intent.CATEGORY_OPENABLE);
-            Intent intent = Intent.createChooser(chooseFile, "Escolha o arquivo");
-            //startActivityForResult(intent, ESCOLHE_ARQUIVO);
-            startActivityForResult(new Intent(this, EscolheArquivo.class), ESCOLHE_ARQUIVO);
-
+            // EXPORTA TESTES PARA EXCEL
+            if (Build.VERSION.SDK_INT >= 23)
+                PermissaoSD(ESCOLHE_XLS);
+            else
+                abrePasta(ESCOLHE_XLS);
         }
 
         setResult(RESULT_OK);
 
         return false;
+    }
+
+    private void PermissaoSD(int nr) {
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, nr);
+            }
+        } else {
+            abrePasta(nr);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        // If request is cancelled, the result arrays are empty.
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            // permission was granted, yay! Do the
+            abrePasta(requestCode);
+        } else {
+            // permission denied, boo! Disable the
+            Toast.makeText(getApplicationContext(), getString(R.string.dica_semDados), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void SalvaNomeTestes() {
@@ -296,18 +327,86 @@ public class Ajustes extends PreferenceActivity implements
         return null;
     }
 
-    public void abrePasta()
-    {
-        startActivityForResult(new Intent(this, EscolhePasta.class), 111);
+    public void abrePasta(int nr) {
+
+        if (nr == ESCOLHE_PASTA) {
+            Bundle envelope = new Bundle();
+            envelope.putString("tipo", "");
+            Intent atividade = new Intent(this, EscolhePasta.class);
+            atividade.putExtras(envelope);
+            startActivityForResult(atividade, nr);
+        }
+
+        if (nr == ESCOLHE_XLS) {
+            Bundle envelope = new Bundle();
+            envelope.putString("tipo", ".xls");
+            Intent atividade = new Intent(this, EscolhePasta.class);
+            atividade.putExtras(envelope);
+            startActivityForResult(atividade, nr);
+        }
+
+        if (nr == ESCOLHE_BACKUP) {
+            Bundle envelope = new Bundle();
+            envelope.putString("tipo", "meus_testes");
+            Intent atividade = new Intent(this, EscolhePasta.class);
+            atividade.putExtras(envelope);
+            startActivityForResult(atividade, nr);
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case ESCOLHE_ARQUIVO:
+
+            case ESCOLHE_PASTA:
+
                 if (resultCode == RESULT_OK) {
 
-                    if (data != null){
+                    if (data != null) {
+
+                        Bundle extras = data.getExtras();
+                        String path = (String) extras.get(EscolhePasta.CHOSEN_DIRECTORY);
+
+                        try {
+
+                            SharedPreferences sharedPref = getSharedPreferences("backup", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor edit = sharedPref.edit();
+                            edit.putString("backup", path);
+                            edit.commit();
+
+                            // CRIA UMA COPIA DO BANCO DE DADOS NO SD
+                            dbTestes.open();
+                            dbTestes.copiaBD(path);
+                            Toast.makeText(getApplicationContext(),
+                                    getString(R.string.dica_copia_bd), Toast.LENGTH_SHORT)
+                                    .show();
+                            dbTestes.close();
+                            BackupManager android = new BackupManager(getApplicationContext());
+                            android.dataChanged();
+
+                            pastaBackUp = sharedPref.getString("backup", "");
+
+                            if (!pastaBackUp.equals("")) {
+
+                                backup.setSummary(pastaBackUp);
+                            }
+
+                        } catch (Exception e) {
+
+
+                            Toast.makeText(getApplicationContext(),
+                                    getString(R.string.erro_copia_bd), Toast.LENGTH_SHORT)
+                                    .show();
+                            Log.e("Seleção de arquivos", "Deu erro!!!", e);
+                        }
+                    }
+                }
+
+                break;
+            case ESCOLHE_XLS:
+                if (resultCode == RESULT_OK) {
+
+                    if (data != null) {
 
                         Bundle extras = data.getExtras();
                         arquivo = (String) extras.get(EscolhePasta.CHOSEN_DIRECTORY);
@@ -325,7 +424,7 @@ public class Ajustes extends PreferenceActivity implements
 
                         } catch (Exception e) {
 
-                            Log.e("Seleção de arquivos","Deu erro!!!", e);
+                            Log.e("Seleção de arquivos", "Deu erro!!!", e);
                             Toast.makeText(getApplicationContext(),
                                     getString(R.string.erro_importa_excel),
                                     Toast.LENGTH_SHORT).show();
@@ -333,41 +432,36 @@ public class Ajustes extends PreferenceActivity implements
                     }
 
                 }
-            break;
-            case 111:
+                break;
+            case ESCOLHE_BACKUP:
 
-                if (resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
 
-                    if (data != null){
+                    if (data != null) {
 
                         Bundle extras = data.getExtras();
                         String path = (String) extras.get(EscolhePasta.CHOSEN_DIRECTORY);
 
                         try {
 
-                            // CRIA UMA COPIA DO BANCO DE DADOS NO SD
+                            // RESTAURA O BANCO DE DADOS
                             dbTestes.open();
-                            dbTestes.copiaBD(path);
+                            dbTestes.restauraBD(path);
                             Toast.makeText(getApplicationContext(),
-                                    getString(R.string.dica_copia_bd), Toast.LENGTH_SHORT)
+                                    getString(R.string.dica_restaura_bd), Toast.LENGTH_SHORT)
                                     .show();
                             dbTestes.close();
-                            BackupManager android = new BackupManager(getApplicationContext());
-                            android.dataChanged();
 
                         } catch (Exception e) {
 
 
                             Toast.makeText(getApplicationContext(),
-                                    getString(R.string.erro_copia_bd), Toast.LENGTH_SHORT)
+                                    getString(R.string.erro_restaura_bd), Toast.LENGTH_SHORT)
                                     .show();
-                            Log.e("Seleção de arquivos","Deu erro!!!", e);
+                            Log.e("Seleção de arquivos", "Deu erro!!!", e);
                         }
                     }
                 }
-
-                break;
-            case 333:
 
                 break;
         }
